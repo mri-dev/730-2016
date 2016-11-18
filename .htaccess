@@ -1,0 +1,34 @@
+AddDefaultCharset UTF-8
+Options -Indexes
+RewriteEngine On
+
+
+RewriteCond %{HTTP_HOST} ^diuss.hu
+RewriteRule ^(.*)$ http://www.diuss.hu/$1 [R=permanent,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+RewriteRule ^(.+)$ index.php?tag=$1 [QSA,L]
+
+#<IfModule mod_expires.c>
+#    ExpiresActive On
+#    ExpiresDefault "access plus 3 days"
+#    ExpiresByType text/css "access plus 1 days"
+#    ExpiresByType text/plain "access plus 1 days"
+#    ExpiresByType image/gif "access plus 1 month"
+#    ExpiresByType image/png "access plus 1 days"
+#    ExpiresByType image/jpeg "access plus 1 days"
+#    ExpiresByType application/x-javascript "access plus 1 days"
+#    ExpiresByType application/javascript "access plus 1 days"
+#    ExpiresByType application/x-icon "access plus 7 days"
+#</IfModule>
+
+<FilesMatch "\.(jpg|jpeg|png|gif|swf)$">
+Header set Cache-Control "max-age=86400, public"
+</FilesMatch>
+
+<FilesMatch "\.(txt|xml|js|css)$">
+Header set Cache-Control "max-age=-1, must-revalidate"
+</FilesMatch>
