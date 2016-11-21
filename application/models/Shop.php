@@ -113,8 +113,6 @@
 					array($mid, $productID, $variationID, 1)
 				);
 			}
-
-
 		}
 
 		public function removeItemFromCart($mid, $productID, $variationID){
@@ -125,14 +123,19 @@
 			if($variationID == '')
 				throw new Exception(__('Termék variáció azonosító hiányzik!'));
 
-			$c = $this->db->query("SELECT pcs FROM ".TAGS::DB_TABLE_SHOP_CART." WHERE productID = $productID and variationID = $variationID and mID = $mid;")->fetch(PDO::FETCH_ASSOC);
+			if ($productID == 'giftcard') {
+				// Ajándékkártya eltávolítás
+				$this->db->query("DELETE FROM giftcard_using WHERE code = '$variationID' and sessionid = '$mid' and orderID = 0");
+			} else {
+				$c = $this->db->query("SELECT pcs FROM ".TAGS::DB_TABLE_SHOP_CART." WHERE productID = $productID and variationID = $variationID and mID = $mid;")->fetch(PDO::FETCH_ASSOC);
 
-			$cn = $c[pcs];
+				$cn = $c[pcs];
 
-			if($cn == 1){
-				$this->db->query("DELETE FROM ".TAGS::DB_TABLE_SHOP_CART." WHERE productID = $productID and variationID = $variationID and mID = $mid");
-			}else if($cn > 1){
-				$this->db->query("UPDATE ".TAGS::DB_TABLE_SHOP_CART." SET pcs = pcs - 1  WHERE productID = $productID and variationID = $variationID and mID = $mid");
+				if($cn == 1){
+					$this->db->query("DELETE FROM ".TAGS::DB_TABLE_SHOP_CART." WHERE productID = $productID and variationID = $variationID and mID = $mid");
+				}else if($cn > 1){
+					$this->db->query("UPDATE ".TAGS::DB_TABLE_SHOP_CART." SET pcs = pcs - 1  WHERE productID = $productID and variationID = $variationID and mID = $mid");
+				}
 			}
 		}
 
@@ -188,7 +191,7 @@
 			$originPrice = $totalPrice;
 
 			// Coupon
-			if ( true ) {
+			if ( false ) {
 				$dt[] = array(
 					'isProduct' => 0,
 					'termekID' => 'coupon',
@@ -203,29 +206,31 @@
 			}
 
 			//Giftcards
-			if ( true ) {
-				$dt[] = array(
-					'isProduct' => 0,
-					'termekID' => 'giftcard',
-					'variationID' => '212132343',
-					'pcs' => 1,
-					'variationName' => '212132343/345',
-					'termekNev' => 'Ajándékkártya',
-					'price' => -5000,
-					'priceCode' => Lang::getPriceCode()
-				);
-				$totalPrice -= 5000;
-				$dt[] = array(
-					'isProduct' => 0,
-					'termekID' => 'giftcard',
-					'variationID' => '1000123345',
-					'pcs' => 1,
-					'variationName' => '1000123345/164',
-					'termekNev' => __('Ajándékkártya'),
-					'price' => -2800,
-					'priceCode' => Lang::getPriceCode()
-				);
-				$totalPrice -= 2800;
+			$giftq = "SELECT
+	      gu.ID, gu.code, gu.verify_code,
+	      g.amount_".\Lang::getPriceCode()." as price
+	    FROM giftcard_using as gu
+	    LEFT OUTER JOIN giftcards as g ON g.code = gu.code
+	    WHERE
+	      gu.sessionid = '$mid' and gu.orderID = 0";
+	    $giftdata = $this->db->query($giftq);
+
+	    $giftdatalist = $giftdata->fetchAll(\PDO::FETCH_ASSOC);
+
+			if ( count($giftdatalist) != 0 ) {
+				foreach ($giftdatalist as $gifte) {
+					$dt[] = array(
+						'isProduct' => 0,
+						'termekID' => 'giftcard',
+						'variationID' => $gifte['code'],
+						'pcs' => 1,
+						'variationName' => $gifte['code'].'/'.$gifte['verify_code'],
+						'termekNev' => __('Ajándékkártya'),
+						'price' => ($gifte['price'] * -1),
+						'priceCode' => Lang::getPriceCode()
+					);
+					$totalPrice -= $gifte['price'];
+				}
 			}
 
 			$re[itemNum]	= $itemNum;
@@ -261,6 +266,28 @@
 			$validCoupon 	= $this->getCouponId($couponKey);
 			$coupon 		= ($validCoupon) ? $validCoupon : 'NULL';
 
+			// Ajándékkártya ellenőrzése
+			$giftcq = "SELECT
+				gu.ID,
+				gu.code,
+				gu.verify_code,
+				g.price_".Lang::getPriceCode()." as price
+			FROM
+				giftcard_using as gu
+			WHERE
+				gu.orderID = 0 and
+				gu.sessionid = '".\Helper::getMachineID()."'
+			";
+			$giftcq = $this->db->query($giftcq);
+
+			$used_giftcards = array();
+			if ($giftcq->rowCount() != 0) {
+				$gfc = $giftcq->fetchAll(\PDO::FETCH_ASSOC);
+				foreach ($gfc as $gd) {
+					$used_giftcards[] = $gd;
+				}
+			}
+
 			// Megrendelés jegyzése
 				$newOrder = "
 					INSERT INTO ".TAGS::DB_TABLE_ORDERS."(email, userID, orderKey, ordererIP, comment, couponID, priceCode, payMethod)
@@ -287,9 +314,24 @@
 
 				$orderData = $this->db->query("SELECT * FROM ".TAGS::DB_TABLE_ORDERS." WHERE ID = $lastOrderId")->fetch(PDO::FETCH_ASSOC);
 
+			// Ajándékkártya események
+			if(!empty($used_giftcards))
+			foreach ($used_giftcards as $gk) {
+				$this->db->query("UPDATE giftcard_using SET orderID = $lastOrderId WHERE ID = ".$gk['ID']);
+				$this->db->query("UPDATE giftcards SET when_used = now() WHERE code = ".$gk['code']);
+			}
+
 			// E-mail értesítés
 				// Alert
 				$msg = 'Új megrendelés érkezett - <a href="'.DOMAIN.'admin">'.DOMAIN.'admin</a>';
+
+				if(!empty($used_giftcards)){
+					$msg .= '<br><br>Felhasznált ajándékkártyák:<br>';
+					foreach ($used_giftcards as $gk) {
+						$msg .= '- '. $gk['code'].' / '.$gk['verify_code'].'<br>';
+					}
+				}
+
 
 				Helper::sendMail(array(
 					'recepiens' => array(ALERT_EMAIL),

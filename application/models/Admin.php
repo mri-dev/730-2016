@@ -1652,9 +1652,30 @@ class Admin_Model extends Model {
 		extract($this->db->q($q,$arg));
 
 		foreach($data as $d){
+			$price = 0;
+
+			$d[giftcard] = $this->getGiftcardOnOrder($d[ID], $d[priceCode]);
 			$d[items] = $this->orderedItems($d[ID], array('price_code' => $d[priceCode]));
+
+			foreach ($d[items] as $p) {
+				$price += $p[totalPrice];
+			}
+			if ($d['couponRate'] != '') {
+			 $price -= ($price / 100 * $d[couponRate]);
+			}
+
+			if ($d['transportPrice'] != '') {
+				$price += $p[transportPrice];
+			}
+			if ($d[giftcard]['total'] != 0) {
+				$price -= $d[giftcard]['total'];
+			}
+
+			$d[total_price] = $price;
+
 			$back[] = $d;
 		}
+
 		return $back;
 	}
 
@@ -1673,15 +1694,53 @@ class Admin_Model extends Model {
 
 		extract($this->db->q($q, $arg));
 
+		$price = 0;
+
+		$data[giftcard] = $this->getGiftcardOnOrder($data[ID], $data[priceCode]);
 		$data[userData] = $this->loadUserData($data[userID], array('onlyUserData' => true));
 		$data[orderedItems] = $this->orderedItems($data[ID], array(
 			'price_code' => $data[priceCode]
 		));
+		foreach ($data[orderedItems] as $p) {
+			$price += $p[totalPrice];
+		}
+		if ($data['couponRate'] != '') {
+		 $price -= ($price / 100 * $data[couponRate]);
+		}
 
+		if ($data['transportPrice'] != '') {
+			$price += $p[transportPrice];
+		}
+		if ($data[giftcard]['total'] != 0) {
+			$price -= $data[giftcard]['total'];
+		}
+		$data[total_price] = $price;
 		return $data;
 	}
 	public function getOrders($arg = array()){
 		return $this->getUserOrders(false, $arg);
+	}
+
+	public function getGiftcardOnOrder( $id, $pricecode = 'huf' )
+	{
+		$q = "SELECT
+			gu.code,
+			gu.verify_code,
+			g.amount_".$pricecode." as price
+		FROM giftcard_using as gu
+		LEFT OUTER JOIN giftcards as g ON g.code = gu.code
+		WHERE gu.orderID = $id;";
+
+		$arg['multi'] = 1;
+		extract($this->db->q($q, $arg));
+
+		$total = 0;
+		foreach ($data as $dat) {
+			$total += $dat['price'];
+		}
+		$ret['total'] = $total;
+
+		return $ret;
 	}
 
 	protected function orderedItems($orderID, $arg = array()){
@@ -1905,7 +1964,13 @@ class Admin_Model extends Model {
 	}
 
 	public function getAllGiftcards(){
-		$q 		= "SELECT * FROM ".TAGS::DB_TABLE_GIFTCARDS." ORDER BY when_used ASC, code DESC";
+		$q 		= "SELECT
+			c.*,
+			o.orderKey as orderkey
+		FROM ".TAGS::DB_TABLE_GIFTCARDS." as c
+		LEFT OUTER JOIN giftcard_using as cu ON cu.code = c.code
+		LEFT OUTER JOIN orders as o ON o.ID = cu.orderID
+		ORDER BY c.when_used ASC, c.code DESC";
 
 		$arg[multi] = '1';
 		extract($this->db->q($q, $arg));
@@ -1913,7 +1978,6 @@ class Admin_Model extends Model {
 		$bdata = array();
 
 		foreach($data as $d){
-			$d[usedNum] = $this->getUsedCouponNumbers($d[ID]);
 			$bdata[] = $d;
 		}
 

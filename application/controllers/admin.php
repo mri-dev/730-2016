@@ -109,8 +109,6 @@ class admin extends Controller{
 				}
 			}
 
-
-
 			if(Post::on('saveBookPage')){
 				try{
 					$this->Admin->saveBookPages( $_POST['saveBookPage'], $_POST );
@@ -547,7 +545,7 @@ class admin extends Controller{
 				$this->view->giftcard = $this->Admin->getGiftcardData($this->view->gets[3]);
 			}
 		}
-		
+
 		/* SZTÁRJAIN */
 		function ourstars(){
 			// Sztár hozzáadása

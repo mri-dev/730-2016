@@ -218,3 +218,6 @@ Eredeti ár::Origin Price;;
 Kuponkedvezmény::Coupon discount;;
 Ajándékkártya::Giftcard;;
 Kód::Code;;
+Az Ön kosara jelenleg üres. Helyezzen termékeket a kosarába és utána aktiválja ajándékkártyáit.::Az Ön kosara jelenleg üres. Helyezzen termékeket a kosarába és utána aktiválja ajándékkártyáit.;;
+Az aktiválni kívánt kártya (#%s) nem használható vagy már nem érvényes.::Az aktiválni kívánt kártya (#%s) nem használható vagy már nem érvényes.;;
+A megadott ajándékkártyát már megadta.::A megadott ajándékkártyát már megadta.;;

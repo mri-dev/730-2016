@@ -188,6 +188,14 @@
 							</div>
 						</div>
 
+						<div class="tbl" style="width:95%; margin:0 auto;">
+							<div class="tbl-cell col-100">
+								<div class="giftcards">
+									<a href="/giftcards"><i class="fa fa-gift"></i> <?=__('Ajándékkártya aktiválás')?></a>
+								</div>
+							</div>
+						</div>
+
 						<div class="title"><?=__('Megjegyzés (pl.: gyűrű méret)')?></div>
 						<div>
 							<textarea name="comment"></textarea>

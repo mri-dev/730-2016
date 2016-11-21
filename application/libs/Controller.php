@@ -9,18 +9,21 @@
         Session::init();
         Helper::setMashineID();
         $this->gets 		= Helper::GET();
-		
+
         // CORE
         $this->model 		= new Model();
         $this->view 		= new View();
         //////////////////////////////////////////////////////
         $this->gets 		= Helper::GET();
-        $this->view->gets 	= $this->gets;
-		$this->User 		= $this->model->open('Users');
-			$this->view->user = $this->User->get();
-		$this->portal      	= $this->model->open('Portal');
-			$this->view->settings = $this->model->getSettings();
-		
+        $this->view->gets = $this->gets;
+		    $this->User = $this->model->open('Users');
+			  $this->view->user = $this->User->get();
+		    $this->portal = $this->model->open('Portal');
+			  $this->view->settings = $this->model->getSettings();
+
+        // Remove using giftcards
+    		$this->model->db->query("DELETE FROM giftcard_using WHERE ( now() - added ) > 3600;");
+
 			// MENÜK
 				// FELSŐ - Fejrész
 				$this->view->topMenu = $this->portal->getMenus('top');
@@ -31,10 +34,10 @@
                 $this->view->collection_items = $this->portal->getAllCollection();
             // Kategóriák
                 $this->view->all_category = $this->portal->getAllCategory();
-					
+
         if(!$arg[hidePatern]){ $this->hidePatern = false; }
-		
-		
+
+
 		if( $_COOKIE[Lang::COUNTRY_CURRENCY_COOKIE] == '' ) {
 			setcookie( Lang::COUNTRY_CURRENCY_COOKIE, $this->getCurrencyCodeByCountry($_COOKIE['geo_country']), time() + 3600 * 24 * 30, '/' );
 			if( isset($_COOKIE['geo_needrefreshpage']) ) {
@@ -49,17 +52,17 @@
         $subfolder 	= '';
 
         $this->theme_wire 	= ($key != '') ? $key : '';
-		
+
         if($this->getThemeFolder() != ''){
             $mode 		= true;
-            $subfolder 	= $this->getThemeFolder().'/';		
+            $subfolder 	= $this->getThemeFolder().'/';
         }
-		
+
         # Oldal címe
         if(self::$pageTitle != null){
             $this->view->title = self::$pageTitle . ' | ' . TITLE;
         }
-		
+
         # Render HEADER
         if(!$this->hidePatern){
             $this->view->render($subfolder.$this->theme_wire.'header',$mode);
@@ -72,7 +75,7 @@
     function __destruct(){
         $mode 		= false;
         $subfolder 	= '';
-		
+
         if($this->getThemeFolder() != ''){
             $mode 		= true;
             $subfolder 	= $this->getThemeFolder().'/';
@@ -82,11 +85,11 @@
             # Render FOOTER
             $this->view->render($subfolder.$this->theme_wire.'footer',$mode);
         }
-		
+
     }
-	
+
 	private function getCurrencyCodeByCountry( $country = 'Hungary' ) {
-		$country_currency = $this->model->db->query("SELECT currency_code FROM ".TAGS::DB_TABLE_CURRENCY_COUNTRIES." WHERE country = '$country';")->fetchColumn();		
+		$country_currency = $this->model->db->query("SELECT currency_code FROM ".TAGS::DB_TABLE_CURRENCY_COUNTRIES." WHERE country = '$country';")->fetchColumn();
 		return strtoupper($country_currency);
 	}
 

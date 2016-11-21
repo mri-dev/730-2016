@@ -1136,6 +1136,12 @@ div.divider{
 	font-size:12px;
 	padding: 5px 0 5px 0;
 }
+.cartBody .giftcards a{
+	padding: 8px 0 0 0;
+  font-size: 15px;
+  color: #78b578;
+  display: block;
+}
 .cartBody .user{
 	font-size:18px;
 }
@@ -2450,6 +2456,49 @@ body.book-view .wire {
 .accepttac label {
 	line-height: 34px;
 	 margin: 0;
+}
+
+.giftcards-infopage .desc{
+  font-size: 16px;
+}
+
+.giftcards-infopage .activator {
+  border: 1px solid #f1f1f1;
+  padding: 20px;
+  background: #ffffff;
+  margin: 25px 0;
+  width: 55%;
+}
+.giftcards-infopage .activator h2 {
+  margin: 0 0 10px 0;
+}
+
+.giftcards-infopage .activator input[type=text],
+.giftcards-infopage .activator input[type=number]{
+  font-size: 17px;
+}
+
+.giftcards-infopage .activator i{
+  font-size: 12px;
+}
+
+.giftcards-infopage .usage{
+  color: #aaaaaa;
+}
+.giftcards-infopage .usage h4{
+  color: #999999;
+}
+.giftcards-infopage .added-codes{
+  font-size: 20px;
+  border-left: 4px solid black;
+  margin: 4px;
+  padding-left: 5px;
+  color: #78b578;
+}
+.giftcards-infopage .added-codes .price{
+  font-weight: bold;
+  margin-left: 20px;
+  color: black;
 }
 
 @media screen and (max-width : 1200px){

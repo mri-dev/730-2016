@@ -139,14 +139,14 @@
 			</tr>
 		</thead>
 		<tbody>
-			<? foreach($this->coupons[data] as $d): ?>
+			<? foreach($this->coupons[data] as $d):?>
 			<tr>
-				<td class="center"><strong><?=strtoupper($d[code])?></strong></td>
+				<td class="center"><? if($d[when_used]): ?><strong style="color: green;"><?=strtoupper($d[code])?></strong><? else: ?><strong style="color: orange;"><?=strtoupper($d[code])?></strong><?  endif; ?></td>
 				<td class="center"><?=$d[amount_huf]?> Ft</td>
 				<td class="center">€<?=$d[amount_eur]?></td>
 				<td class="center">$<?=$d[amount_usd]?></td>
 				<td class="center"><?=$d[expired]?></td>
-				<td class="center"><?=($d[when_used])?$d[when_used]:'NEM'?></td>
+				<td class="center"><?=($d[when_used])?'<span style="font-size: 11px;">'.$d[when_used].'<span><div><a href="/admin/orders/o/'.$d[orderkey].'" style="color: green;" target="_blank" title="Megrendelés adatlap">'.$d[orderkey].'</a></div>':'NEM'?></td>
 				<td class="center">
 					<a title="Szerkesztés" href="<?=ADMROOT?>/<?=$this->gets[1]?>/edit/<?=$d[ID]?>"><i class="fa fa-pencil"></i></a> &nbsp;
 					<a title="Törlés" href="<?=ADMROOT?>/<?=$this->gets[1]?>/del/<?=$d[ID]?>"><i class="fa fa-times"></i></a>
