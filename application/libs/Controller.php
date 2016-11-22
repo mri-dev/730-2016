@@ -22,7 +22,7 @@
 			  $this->view->settings = $this->model->getSettings();
 
         // Remove using giftcards
-    		$this->model->db->query("DELETE FROM giftcard_using WHERE ( now() - added ) > 3600;");
+    		$this->model->db->query("DELETE FROM giftcard_using WHERE orderID = 0 and ( now() - added ) > 3600;");
 
 			// MENÜK
 				// FELSŐ - Fejrész

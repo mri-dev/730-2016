@@ -31,7 +31,7 @@
           <span class="price">-<?=$g['price']?> <?=$gl['valuta']?></span>
         </div>
       <?php endforeach; ?>
-      Összes levonás: <strong><?=$gl['total_price']?> <?=$gl['valuta']?></strong>
+      <?=__('Összes levonás')?>: <strong><?=$gl['total_price']?> <?=$gl['valuta']?></strong>
     <?php endif; ?>
   </div>
   <div class="usage">

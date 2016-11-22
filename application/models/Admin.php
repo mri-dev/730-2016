@@ -1665,7 +1665,7 @@ class Admin_Model extends Model {
 			}
 
 			if ($d['transportPrice'] != '') {
-				$price += $p[transportPrice];
+				$price += $d[transportPrice];
 			}
 			if ($d[giftcard]['total'] != 0) {
 				$price -= $d[giftcard]['total'];
@@ -1709,7 +1709,7 @@ class Admin_Model extends Model {
 		}
 
 		if ($data['transportPrice'] != '') {
-			$price += $p[transportPrice];
+			$price += $data[transportPrice];
 		}
 		if ($data[giftcard]['total'] != 0) {
 			$price -= $data[giftcard]['total'];

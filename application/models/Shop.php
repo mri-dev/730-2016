@@ -271,13 +271,15 @@
 				gu.ID,
 				gu.code,
 				gu.verify_code,
-				g.price_".Lang::getPriceCode()." as price
+				g.amount_".Lang::getPriceCode()." as price
 			FROM
 				giftcard_using as gu
+			LEFT OUTER JOIN giftcards as g ON g.code = gu.code
 			WHERE
 				gu.orderID = 0 and
 				gu.sessionid = '".\Helper::getMachineID()."'
 			";
+			echo $giftcq;
 			$giftcq = $this->db->query($giftcq);
 
 			$used_giftcards = array();
@@ -331,7 +333,6 @@
 						$msg .= '- '. $gk['code'].' / '.$gk['verify_code'].'<br>';
 					}
 				}
-
 
 				Helper::sendMail(array(
 					'recepiens' => array(ALERT_EMAIL),
