@@ -2,10 +2,10 @@
 	function addVariation(){
 		$('.productVariations .each.items:last').after('<div class="each items">'+$('.productVariations .each.items:last').html()+'</div>');
 	}
-	
+
 	function showVariation(id){
 		$('tr.variations').hide();
-		
+
 		$('tr.variations.p'+id).slideDown(400);
 	}
 </script>
@@ -61,7 +61,7 @@
 						</div>
 					</div>
 				</div>
-				<? endforeach; ?>	
+				<? endforeach; ?>
 			<br />
 			<div class="divider"></div>
 			<br />
@@ -161,7 +161,7 @@
 							<div class="price col-10">Ár - EUR</div>
 							<div class="stock col-10">Készlet</div>
 						</div>
-						<? foreach($this->product[variations] as $v): ?>
+						<? if($this->product[variations]) foreach($this->product[variations] as $v): ?>
 							<div class="each">
 								<? foreach( $this->settings['all_languages'] as $lang ):?>
 								<div class="col-10"><?=$v['name_'.$lang['code']]?></div>
@@ -174,13 +174,13 @@
 									<a title="Szerkesztés" href="<?=ADMROOT?>/product_variation/edit/<?=$v[ID]?>"><i class="fa fa-pencil"></i></a>
 									<a title="Törlés" href="<?=ADMROOT?>/product_variation/del/<?=$v[ID]?>/?return=<?=$_SERVER['REQUEST_URI']?>"><i class="fa fa-times"></i></a>
 								</div>
-							</div>	
+							</div>
 							<br />
 						<? endforeach; ?>
-						<? if($_POST[productVariation][name][hu][0] != ''): 
+						<? if($_POST[productVariation][name][hu][0] != ''):
 							$s = -1;
-							foreach($_POST[productVariation][name][hu] as $ps): $s++; 
-								if($ps == '') break;								
+							foreach($_POST[productVariation][name][hu] as $ps): $s++;
+								if($ps == '') break;
 								$s_price_huf = $_POST[productVariation][price][huf][$s];
 								$s_price_usd = $_POST[productVariation][price][usd][$s];
 								$s_price_eur = $_POST[productVariation][price][eur][$s];
@@ -194,8 +194,8 @@
 								<div class="price col-10"><input type="number" value="<?=$s_price_usd?>" class="form-control" name="productVariation[price][usd][]" /></div>
 								<div class="price col-10"><input type="number" value="<?=$s_price_eur?>" class="form-control" name="productVariation[price][eur][]" /></div>
 								<div class="stock col-10"><input type="number" value="<?=$s_stock?>" class="form-control" name="productVariation[stock][]" /></div>
-								
-							</div>	
+
+							</div>
 							<? endforeach; ?>
 						<? endif; ?>
 						<div class="each items">
@@ -235,7 +235,7 @@
 				</form>
 			</div>
 		</div>
-		
+
 	</div>
 </div>
 <? elseif($this->gets[2] == 'edit'): ?>
@@ -290,7 +290,7 @@
 					</div>
 				</div>
 			</div>
-			<? endforeach; ?>			
+			<? endforeach; ?>
 			<br />
 			<div class="divider"></div>
 			<br />
@@ -403,13 +403,13 @@
 									<a title="Szerkesztés" href="<?=ADMROOT?>/product_variation/edit/<?=$v[ID]?>"><i class="fa fa-pencil"></i></a>
 									<a title="Törlés" href="<?=ADMROOT?>/product_variation/del/<?=$v[ID]?>/?return=<?=$_SERVER['REQUEST_URI']?>"><i class="fa fa-times"></i></a>
 								</div>
-							</div>	
+							</div>
 							<br />
 						<? endforeach; ?>
-						<? if($_POST[productVariation][name][hu][0] != ''): 
+						<? if($_POST[productVariation][name][hu][0] != ''):
 							$s = -1;
-							foreach($_POST[productVariation][name][hu] as $ps): $s++; 
-								if($ps == '') break;								
+							foreach($_POST[productVariation][name][hu] as $ps): $s++;
+								if($ps == '') break;
 								$s_price_huf = $_POST[productVariation][price][huf][$s];
 								$s_price_usd = $_POST[productVariation][price][usd][$s];
 								$s_price_eur = $_POST[productVariation][price][eur][$s];
@@ -423,8 +423,8 @@
 								<div class="price col-10"><input type="number" value="<?=$s_price_usd?>" class="form-control" name="productVariation[price][usd][]" /></div>
 								<div class="price col-10"><input type="number" value="<?=$s_price_eur?>" class="form-control" name="productVariation[price][eur][]" /></div>
 								<div class="stock col-10"><input type="number" value="<?=$s_stock?>" class="form-control" name="productVariation[stock][]" /></div>
-								
-							</div>	
+
+							</div>
 							<? endforeach; ?>
 						<? endif; ?>
 						<div class="each items">
@@ -473,11 +473,11 @@
 <? else: ?>
 	<div class="float-right">
 		<a href="<?=ADMROOT?>/<?=$this->gets[1]?>/add" class="btn btn-primary btn-md">új termék <i class="fa fa-plus-circle"></i></a>
-	</div>	
+	</div>
 	<h1>Termékek</h1>
 	<form action="" method="post">
 	<div>
-		
+
 		<? if($_COOKIE[filtered]): ?>
 			<strong><?=$this->products[info][total_num]?> db termék </strong>: <span style="color:red;">szűrt lista eredménye</span>
 		<? else: ?>
@@ -489,17 +489,17 @@
 		<thead>
 			<tr>
 				<th width="120">Cikkszám</th>
-				<th width="120">Kollekció</th>	
-				<th>Elnevezése</th>	
-				<th>Kategória</th>				
+				<th width="120">Kollekció</th>
+				<th>Elnevezése</th>
+				<th>Kategória</th>
 				<th width="50">Készlet</th>
 				<th width="25">ÁFA</th>
 				<th width="25">Kedvenc</th>
 				<th width="25">Új</th>
-				<th width="130">Módosítva</th>	
-				<th width="130">Hozzáadva</th>	
-				<th width="20" title="Státusz"><i class="fa fa-eye"></i></th>	
-				<th width="100"></th>				
+				<th width="130">Módosítva</th>
+				<th width="130">Hozzáadva</th>
+				<th width="20" title="Státusz"><i class="fa fa-eye"></i></th>
+				<th width="100"></th>
 			</tr>
 		</thead>
 		<tbody>

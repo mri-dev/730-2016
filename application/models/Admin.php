@@ -1010,7 +1010,7 @@ class Admin_Model extends Model {
 		if($productNumber == '') throw new Exception(__('Kérjük, hogy adja meg a termék cikkszámát!'));
 		if($afa == '') throw new Exception(__('Kérjük, hogy adja meg az ÁFA mértékét!'));
 
-		if($productVariation[name][hu][0] == '' || $productVariation[name][en][0] == '') throw new Exception(__('Terméket nem hozhat létre, ha nincs legalább egy (1) variáció!'));
+		if($productVariation[name][hu][0] == '') throw new Exception(__('Terméket nem hozhat létre, ha nincs legalább egy (1) variáció!'));
 
 		$product_error 	= false;
 		$all_name 		= count($productVariation[name]);
@@ -1037,7 +1037,7 @@ class Admin_Model extends Model {
 			}
 		}
 
-		if( $product_error && $all_name != 0 ) throw new Exception(__('Az egyik termék variációnál hiányzik egy adat. Kérjük pótolja!'));
+		//if( $product_error && $all_name != 0 ) throw new Exception(__('Az egyik termék variációnál hiányzik egy adat. Kérjük pótolja!'));
 
 		//throw new Exception(__('TESZT OK'));
 

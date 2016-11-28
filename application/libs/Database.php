@@ -7,7 +7,8 @@ class Database extends PDO{
 			$this->query("set names utf8");
 
 			// Functions
-				$f .= "DROP FUNCTION IF EXISTS nextOrderID;
+				$f .= "
+				DROP FUNCTION IF EXISTS nextOrderID;
 					DELIMITER $$
 					CREATE FUNCTION nextOrderID()
 					  RETURNS VARCHAR(15)
@@ -46,7 +47,8 @@ class Database extends PDO{
 					  RETURN CONCAT( mainKey, prevKeyStr );
 				END;
 				$$
-				DELIMITER ;";
+				DELIMITER ;
+				";
 
 		}catch(PDOException $e){
 			die($e->getMessage());
