@@ -173,8 +173,8 @@
 							<div class="tbl-cell col-50">
 								<div class="payMethod">
 									<div class="tbl-cell col-100 title"><?=__('Fizetési mód')?>
-										<a href="http://www.payu.hu/sites/hungary/files/documents/Fizetesi_tajekoztato_PayU_Hungary_Kft.pdf " target="_blank">
-											<img src="<?=DOMAIN.PAYU_PATH?>logo/payu_logo.png" height="15" alt="PayU Vásárlói tájékoztató" title="PayU – Online bankkártyás fizetés" />
+										<a href="http://simplepartner.hu/PaymentService/Fizetesi_tajekoztato.pdf" target="_blank">
+											<img src="<?=IMG?>payu_logo_small.png" height="12" alt="Simple - Online bankkártyás fizetés" title="Simple - Online bankkártyás fizetés" />
 										</a>
 									</div>
 									<div class="tbl-cell col-100">

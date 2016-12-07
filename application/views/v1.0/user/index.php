@@ -187,13 +187,16 @@
 		<div class="divider"></div>
 		<h3><?=__('Megrendeléseim')?> (<?=count($this->user[orders])?>)</h3>
 		<?
-			if ( $this->gets[1] == 'pay' && $this->gets[2] == 'payu' ) {
+			if ( $this->gets[1] == 'pay' && $this->gets[2] == 'simple' ) {
 			?>
 			<div class="payu-trans">
 				<div class="head">
 					<?=__('Kártyás fizetés indítása')?>: <?=base64_decode($this->gets[3])?>
 				</div>
 				<?=$this->pay_form?>
+				<br>
+				<a href="http://simplepartner.hu/PaymentService/Fizetesi_tajekoztato.pdf" target="_blank">
+						<img src="/images/simple_logo_long.png" height="18" alt="Simple - Online bankkártyás fizetés" title="Simple - Online bankkártyás fizetés"></a>
 			</div>
 			<?
 			} else if( $this->gets[1] == 'pay' && $this->gets[2] == 'paypal' ){
@@ -289,8 +292,8 @@
 											<table cellpadding="3">
 												<tbody>
 													<tr>
-														<td><a title="<?=__('Kattintson a kártyás fizetéshez')?>" href="/user/pay/payu/<?=base64_encode($d[orderKey])?>" class="pay_by_cart"><img src="<?=DOMAIN.PAYU_PATH?>logo/payu_logo_contra.png" height="15"/></a> &nbsp;</td>
-														<td>&nbsp;<a title="<?=__('Kattintson a kártyás fizetéshez')?>" href="/user/pay/payu/<?=base64_encode($d[orderKey])?>" class="pay_by_cart"><?=__('Kártyás fizetés indítása')?></a></td>
+														<td><a title="<?=__('Kattintson a kártyás fizetéshez')?>" href="/user/pay/simple/<?=base64_encode($d[orderKey])?>" class="pay_by_cart"><img src="<?=IMG?>payu_logo_small.png" height="15"/></a> &nbsp;</td>
+														<td>&nbsp;<a title="<?=__('Kattintson a kártyás fizetéshez')?>" href="/user/pay/simple/<?=base64_encode($d[orderKey])?>" class="pay_by_cart"><?=__('Kártyás fizetés indítása')?></a></td>
 													</tr>
 												</tbody>
 											</table>
