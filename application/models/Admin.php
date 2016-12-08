@@ -1807,6 +1807,10 @@ class Admin_Model extends Model {
 			$post[payu_paid_time] = NOW;
 		}
 
+		if ($post['payu_state'] == '') {
+			$post['payu_state'] = NULL;
+		}
+
 		$this->db->update(
 			TAGS::DB_TABLE_ORDERS,
 			$post,

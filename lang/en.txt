@@ -187,6 +187,7 @@ Ellenőrízze, hogy helyesen adta meg a kártya adatait. Ha továbbra is hibát 
 Tranzakció sikeres::Successful transaction;;
 Tranzakció sikertelen::Unsuccessful transaction;;
 Fizetés indítása PayU-val::Start payment via PayU;;
+Fizetés indítása - OTP Simple::Start payment via SimplePay;;
 Sikeres tranzakció!::Successful transaction;;
 Sikertelen tranzakció!::Unsuccessful transaction;;
 Fizetve::Successful paid;;

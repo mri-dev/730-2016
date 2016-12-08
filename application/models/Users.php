@@ -65,8 +65,8 @@
 		$country_currency = $this->db->query("SELECT currency_code FROM ".TAGS::DB_TABLE_CURRENCY_COUNTRIES." WHERE country = '$user_country';")->fetchColumn();
 
 		if( $country_currency != $current_currency ) {
-			setcookie( '__countryCurrency', $country_currency );
-			Helper::reload();
+			//setcookie( '__countryCurrency', $country_currency, time() + 60 * 60 * 24, '/' );
+			//Helper::reload();
 		}
 	}
 

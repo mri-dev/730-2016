@@ -38,13 +38,22 @@
         if(!$arg[hidePatern]){ $this->hidePatern = false; }
 
 
-		if( $_COOKIE[Lang::COUNTRY_CURRENCY_COOKIE] == '' ) {
-			setcookie( Lang::COUNTRY_CURRENCY_COOKIE, $this->getCurrencyCodeByCountry($_COOKIE['geo_country']), time() + 3600 * 24 * 30, '/' );
-			if( isset($_COOKIE['geo_needrefreshpage']) ) {
-				setcookie( 'geo_needrefreshpage', null, time() - 3600, '/' );
-				Helper::reload();
-			}
-		}
+  		if( $_COOKIE[Lang::COUNTRY_CURRENCY_COOKIE] == '' ) {
+  			setcookie( Lang::COUNTRY_CURRENCY_COOKIE, $this->getCurrencyCodeByCountry($_COOKIE['geo_country']), time() + 3600 * 24 * 30, '/' );
+  			if( isset($_COOKIE['geo_needrefreshpage']) ) {
+  				setcookie( 'geo_needrefreshpage', null, time() - 3600, '/' );
+  				Helper::reload();
+  			}
+  		}
+
+      if (!defined("LANG")) {
+        define("LANG", Lang::getLang());
+        if (LANG == 'hu') {
+          define("SIMPLE_PAY_TERM_URL", "http://simplepartner.hu/PaymentService/Fizetesi_tajekoztato.pdf");
+        } else {
+          define("SIMPLE_PAY_TERM_URL", "http://simplepartner.hu/PaymentService/Payment_information.pdf");
+        }
+      }
     }
 
     function bodyHead($key = ''){

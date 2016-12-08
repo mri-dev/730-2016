@@ -2,7 +2,7 @@
 	<div class="page_width">
 		<div class="footer-row">
 			<div class="footer-col payu">
-				<a href="http://simplepartner.hu/PaymentService/Fizetesi_tajekoztato.pdf" target="_blank">
+				<a href="<?=SIMPLE_PAY_TERM_URL?>" target="_blank">
 						<img src="<?=IMG?>simple_logo_long.png" height="18" alt="Simple - Online bankkártyás fizetés" title="Simple - Online bankkártyás fizetés" /></a>
 				</a>
 			</div>

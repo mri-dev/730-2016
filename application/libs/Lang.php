@@ -5,24 +5,24 @@
 	private static $avaiable_currency 	= array('HUF','USD','EUR');
 
 	const COUNTRY_CURRENCY_COOKIE = '__countryCurrency';
-	
+
 	public static function content($string){
 		$langfile = self::$lang_root .'/'. self::getLang() . '.txt';
-		
+
 		if(file_exists($langfile)){
-			
+
 			if(!self::$language_content){
 				$ctx 	= @file_get_contents($langfile);
 				self::$language_content = $ctx;
 			}else{
 				$ctx = self::$language_content;
 			}
-						
+
 			$src 	= self::formatToArray($ctx);
-			
-			$string = (array_key_exists($string,$src))?$src[$string]:$string; 
-			
-			return $string;	
+
+			$string = (array_key_exists($string,$src))?$src[$string]:$string;
+
+			return $string;
 		}else{
 			return $string;
 		}
@@ -57,95 +57,95 @@
 
 		return $currency;
 	}
-	
+
 	private static function formatToArray($str){
 		$arr = array();
-		$a_str = explode(';;',rtrim($str,';;'));	
+		$a_str = explode(';;',rtrim($str,';;'));
 		foreach($a_str as $as){
 			$b_str = explode('::',$as);
 			$arr[trim($b_str[0])] = trim($b_str[1]);
 		}
-		
+
 		return $arr;
 	}
-	
+
 	public static function setLang($langKey){
 		setcookie('lang', $langKey, time() + 60*60*6, '/');
-		
+
 		switch( $langKey ){
 			case 'hu':
-				setcookie(self::COUNTRY_CURRENCY_COOKIE, 'HUF', time() + 60*60*24*7,'/');
+				setcookie(self::COUNTRY_CURRENCY_COOKIE, 'huf', time() + 60*60*24*7,'/');
 			break;
 			case 'en':
-				setcookie(self::COUNTRY_CURRENCY_COOKIE, 'EUR', time() + 60*60*24*7,'/');
+				setcookie(self::COUNTRY_CURRENCY_COOKIE, 'eur', time() + 60*60*24*7,'/');
 			break;
 			case 'ger':
-				setcookie(self::COUNTRY_CURRENCY_COOKIE, 'EUR', time() + 60*60*24*7,'/');
+				setcookie(self::COUNTRY_CURRENCY_COOKIE, 'eur', time() + 60*60*24*7,'/');
 			break;
 			case 'rus':
-				setcookie(self::COUNTRY_CURRENCY_COOKIE, 'EUR', time() + 60*60*24*7,'/');
+				setcookie(self::COUNTRY_CURRENCY_COOKIE, 'eur', time() + 60*60*24*7,'/');
 			break;
 		}
-				
+
 	}
-	
+
 	public static function setCurrency($code){
-		
+
 		if( empty( $code ) ) return false;
-		
+
 		if( !in_array( $code, self::$avaiable_currency ) ) return false;
-				
-		setcookie(self::COUNTRY_CURRENCY_COOKIE, strtolower($code), time() + 60*60*24*7,'/');	
+
+		setcookie(self::COUNTRY_CURRENCY_COOKIE, strtolower($code), time() + 60*60*24*7,'/');
 	}
-	
+
 	public static function getLang(){
 		$lang = DLANG;
-		
+
 		$pricecode = $_COOKIE[self::COUNTRY_CURRENCY_COOKIE];
-		
+
 		if($pricecode != ''){
 			switch($c){
 				default:
 					$lang = 'hu';
 				break;
-				case 'HUF':
+				case 'huf':
 					$lang = 'hu';
 				break;
-				case 'EUR':
+				case 'eur':
 					$lang = 'en';
 				break;
-				case 'USD':
+				case 'usd':
 					$lang = 'en';
 				break;
 			}
 		}
-		
+
 		if(strpos($_SERVER[REQUEST_URI], C_ADMROOT) === 0) return DLANG;
-		
+
 		if($_COOKIE[lang] != ''){
-			$lang = $_COOKIE[lang];	
+			$lang = $_COOKIE[lang];
 		}
-		
+
 		return $lang;
-	}  
-	
+	}
+
 	public static function getPriceCode(){
 		$c 		= false;
 		$code 	= 'HUF';
-		
+
 		if( $_COOKIE[self::COUNTRY_CURRENCY_COOKIE] == '' ){
 			//$getCode = self::ip_info(NULL, 'currencycode');
 			if( !$getCode ){
 				$getCode = $code;
-			}	
-			
-			//setcookie( self::COUNTRY_CURRENCY_COOKIE, $getCode, time() + 60*60*24*7, '/' );		
-			
+			}
+
+			//setcookie( self::COUNTRY_CURRENCY_COOKIE, $getCode, time() + 60*60*24*7, '/' );
+
 			$c = $getCode;
 		}else{
 			$c = $_COOKIE[self::COUNTRY_CURRENCY_COOKIE];
 		}
-		
+
 		$code = strtoupper( $c );
 		/*
 		switch($c){
@@ -162,10 +162,10 @@
 				$code = strtoupper('USD');
 			break;
 		}*/
-		
+
 		return $code;
 	}
-	
+
 	public static function ip_info($ip = NULL, $purpose = "countrycode", $deep_detect = TRUE) {
 		$output = NULL;
 		if (filter_var($ip, FILTER_VALIDATE_IP) === FALSE) {
@@ -190,7 +190,7 @@
 		);
 		if (filter_var($ip, FILTER_VALIDATE_IP) && in_array($purpose, $support)) {
 			$ipdat = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . $ip));
-			
+
 			if (@strlen(trim($ipdat->geoplugin_countryCode)) == 2) {
 				switch ($purpose) {
 					case "location":

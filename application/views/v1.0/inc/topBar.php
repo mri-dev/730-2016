@@ -173,7 +173,7 @@
 							<div class="tbl-cell col-50">
 								<div class="payMethod">
 									<div class="tbl-cell col-100 title"><?=__('Fizetési mód')?>
-										<a href="http://simplepartner.hu/PaymentService/Fizetesi_tajekoztato.pdf" target="_blank">
+										<a href="<?=SIMPLE_PAY_TERM_URL?>" target="_blank">
 											<img src="<?=IMG?>payu_logo_small.png" height="12" alt="Simple - Online bankkártyás fizetés" title="Simple - Online bankkártyás fizetés" />
 										</a>
 									</div>

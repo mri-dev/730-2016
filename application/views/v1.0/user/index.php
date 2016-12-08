@@ -195,7 +195,7 @@
 				</div>
 				<?=$this->pay_form?>
 				<br>
-				<a href="http://simplepartner.hu/PaymentService/Fizetesi_tajekoztato.pdf" target="_blank">
+				<a href="<?=SIMPLE_PAY_TERM_URL?>" target="_blank">
 						<img src="/images/simple_logo_long.png" height="18" alt="Simple - Online bankkártyás fizetés" title="Simple - Online bankkártyás fizetés"></a>
 			</div>
 			<?
@@ -284,11 +284,11 @@
 										<span class="paid_by_cart"><i class="fa fa-check"></i> <?=__('Fizetve')?></span>
 										<?
 										// Feldolgozás alatt
-										elseif( $d[payu_state] != 'COMPLETE' && !is_null($d[payu_state]) ): ?>
+										elseif( $d[payu_state] != 'COMPLETE' && !is_null($d[payu_state]) && $d[payu_state] != '' ): ?>
 											<span class="paid_by_cart in_progress"><i class="fa fa-refresh"></i> <?=__('Fizetés feldolgozás alatt.')?></span>
 										<?
 										// Ha még nincs fizetve
-										elseif( is_null($d[payu_state])): ?>
+										elseif( is_null($d[payu_state]) || $d[payu_state] == ''): ?>
 											<table cellpadding="3">
 												<tbody>
 													<tr>
