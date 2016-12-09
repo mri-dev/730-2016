@@ -8,11 +8,11 @@
       <div class="row">
         <div class="col-md-7">
           <label for="code"><?=__('Ajándékkártya azonosító kódja')?></label>
-          <input type="text" class="form-control" name="code" value="">
+          <input type="text" class="form-control" name="code" value="<?=$_POST['code']?>">
         </div>
         <div class="col-md-3">
           <label for="code"><?=__('Biztonsági kód')?></label>
-          <input type="number" class="form-control" name="seccode" pattern="[0-9]{3}" min="0" step="1" max="999">
+          <input type="text" class="form-control" name="seccode" placeholder="<?=__('3 karakter')?>">
         </div>
         <div class="col-md-2">
           <label for="" style="visibility:hidden;">1</label>
