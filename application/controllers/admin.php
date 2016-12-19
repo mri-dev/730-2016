@@ -206,10 +206,8 @@ class admin extends Controller{
 		function users(){
 			// Összes kollekció betöltése
 			$arg = array();
-			$arg[limit] = 25;
+			$arg[limit] = 1000;
 			$this->view->users = $this->Admin->loadAllUsers($arg);
-
-
 
 			if($this->view->gets[2] == 'u'){
 				// Műveletek végrehajtása
