@@ -41,7 +41,8 @@
 			if( $orderData[couponRate] > 0 ) {
 				$discount = $total_gross * ( $orderData[couponRate] / 100 );
 			}
-
+			
+			$orderData[giftcard] = $this->getGiftcardOnOrder($orderData[ID], $orderData[priceCode]);
 			$orderData[total_discount] = $discount;
 			$orderData[total_net_price] = $total_net;
 			$orderData[total_gross_price] = $total_gross;
@@ -50,6 +51,28 @@
 			$orderData[user_data] 	= $this->db->query( "SELECT * FROM ".TAGS::DB_TABLE_USERS." WHERE ID = ".$orderData[userID] )->fetch(PDO::FETCH_ASSOC);
 
 			return $orderData;
+		}
+		
+		public function getGiftcardOnOrder( $id, $pricecode = 'huf' )
+		{
+			$q = "SELECT
+				gu.code,
+				gu.verify_code,
+				g.amount_".$pricecode." as price
+			FROM giftcard_using as gu
+			LEFT OUTER JOIN giftcards as g ON g.code = gu.code
+			WHERE gu.orderID = $id;";
+
+			$arg['multi'] = 1;
+			extract($this->db->q($q, $arg));
+
+			$total = 0;
+			foreach ($data as $dat) {
+				$total += $dat['price'];
+			}
+			$ret['total'] = $total;
+
+			return $ret;
 		}
 
 		public function getOrderItems( $ID = false, $arg = array() ){
@@ -279,7 +302,7 @@
 				gu.orderID = 0 and
 				gu.sessionid = '".\Helper::getMachineID()."'
 			";
-			echo $giftcq;
+			//echo $giftcq;
 			$giftcq = $this->db->query($giftcq);
 
 			$used_giftcards = array();
@@ -320,7 +343,7 @@
 			if(!empty($used_giftcards))
 			foreach ($used_giftcards as $gk) {
 				$this->db->query("UPDATE giftcard_using SET orderID = $lastOrderId WHERE ID = ".$gk['ID']);
-				$this->db->query("UPDATE giftcards SET when_used = now() WHERE code = ".$gk['code']);
+				$this->db->query("UPDATE giftcards SET when_used = now() WHERE code = '".$gk['code']."'");
 			}
 
 			// E-mail értesítés

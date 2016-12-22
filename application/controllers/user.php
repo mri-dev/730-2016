@@ -193,9 +193,12 @@
 					if( !is_null( $o[couponID] ) ){
 						$rate 		= $o[couponRate];
 						$discount 	= $total / 100 * $rate;
-
 					}
-
+					
+					if($o[giftcard] && $o[giftcard][total] > 0) {
+						$discount 	= (int)$o[giftcard][total];
+					}
+					
 					$lu->setField("DISCOUNT", $discount);
 
 					$o[user_data][szall_firstname] = ($o[user_data][szall_firstname] != '') ? $o[user_data][szall_firstname] : $o[user_data][szam_firstname];

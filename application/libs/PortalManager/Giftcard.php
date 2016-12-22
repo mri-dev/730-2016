@@ -46,9 +46,9 @@ class Giftcard
       throw new \Exception(__("A biztonsági kódnak 3 karakternek kell lennie."));
     }
 
-    $this->db->query("INSERT
+    $this->db->query( $iq = "INSERT
     INTO giftcard_using(sessionid, code, verify_code)
-    VALUES($mid, $code, '$secure');");
+    VALUES($mid, '$code', '$secure');");
   }
 
   public function getAddedCodes()
